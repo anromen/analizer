@@ -9,135 +9,286 @@ const Code = ({ text, setText }) => {
   );
 };
 
-const Token = () => {
+const Token = ({ value, definition }) => {
   return (
     <div className="token">
-      <span className="token-symbol">&</span>
-      <span className="token-description">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec justo
-        consectetur, mollis elit nec, feugiat ipsum. Vestibulum ut finibus nisi.
-        Proin porttitor congue ornare. Etiam a facilisis massa. Nullam placerat
-        leo justo, at rutrum lacus tempor vel. Pellentesque ac nibh maximus,
-        rhoncus lectus at, vehicula nunc.
-      </span>
+      <span className="token-symbol">{value}</span>
+      <span className="token-description">{definition}</span>
     </div>
   );
 };
 
-const Tokens = () => {
+const Tokens = ({ items }) => {
   return (
     <div className="code-tokens">
-      <Token />
+      {items.map((item) => (
+        <Token value={item.token} definition={item.definition} />
+      ))}
     </div>
   );
 };
 
 function App() {
   const RESERVED = [
-    "continue",
-    "abstract",
-    "assert",
-    "boolean",
-    "break",
-    "byte",
-    "case",
-    "catch",
-    "char",
-    "class",
-    "const",
-    "default",
-    "do",
-    "double",
-    "else",
-    "enum",
-    "extends",
-    "final",
-    "finally",
-    "float",
-    "for",
-    "goto",
-    "if",
-    "implements",
-    "import",
-    "instanceof",
-    "int",
-    "interface",
-    "long",
-    "native",
-    "new",
-    "package",
-    "private",
-    "protected",
-    "public",
-    "return",
-    "short",
-    "static",
-    "strictfp",
-    "super",
-    "switch",
-    "synchronized",
-    "this",
-    "throw",
-    "throws",
-    "transient",
-    "try",
-    "void",
-    "volatile",
-    "while",
+    { reg: /continue/, value: "continue" },
+    { reg: /abstract/, value: "abstract" },
+    { reg: /assert/, value: "assert" },
+    { reg: /break/, value: "break" },
+    { reg: /class/, value: "class" },
+    { reg: /const/, value: "const" },
+    { reg: /default/, value: "default" },
+    { reg: /enum/, value: "enum" },
+    { reg: /extends/, value: "extends" },
+    { reg: /final/, value: "final" },
+    { reg: /finally/, value: "finally" },
+    { reg: /implements/, value: "implements" },
+    { reg: /import/, value: "import" },
+    { reg: /instanceof/, value: "instanceof" },
+    { reg: /interface/, value: "interface" },
+    { reg: /native/, value: "native" },
+    { reg: /new/, value: "new" },
+    { reg: /package/, value: "package" },
+    { reg: /private/, value: "private" },
+    { reg: /protected/, value: "protected" },
+    { reg: /public/, value: "public" },
+    { reg: /return/, value: "return" },
+    { reg: /static/, value: "static" },
+    { reg: /strictfp/, value: "strictfp" },
+    { reg: /super/, value: "super" },
+    { reg: /switch/, value: "switch" },
+    { reg: /synchronized/, value: "synchronized" },
+    { reg: /this/, value: "this" },
+    { reg: /throw/, value: "throw" },
+    { reg: /throws/, value: "throws" },
+    { reg: /transient/, value: "transient" },
+    { reg: /try/, value: "try" },
+    { reg: /void/, value: "void" },
+    { reg: /volatile/, value: "volatile" },
+  ];
+  const BOOLEAN_OPERATORS = [
+    { reg: /true/, value: "true" },
+    { reg: /false/, value: "false" },
   ];
   const CONTROL_STRUCTURES = [
-    "do",
-    "else",
-    "for",
-    "if",
-    "try",
-    "while",
-    "catch",
+    { reg: /do/, value: "do" },
+    { reg: /else/, value: "else" },
+    { reg: /for/, value: "for" },
+    { reg: /if/, value: "if" },
+    { reg: /try/, value: "try" },
+    { reg: /while/, value: "while" },
+    { reg: /catch/, value: "catch" },
+    { reg: /goto/, value: "goto" },
   ];
   const DATA_TYPE = [
-    "int",
-    "boolean",
-    "char",
-    "long",
-    "short",
-    "byte",
-    "double",
-    "float",
+    { reg: /int/, value: "int" },
+    { reg: /boolean/, value: "boolean" },
+    { reg: /char/, value: "char" },
+    { reg: /long/, value: "long" },
+    { reg: /short/, value: "short" },
+    { reg: /byte/, value: "byte" },
+    { reg: /double/, value: "double" },
+    { reg: /float/, value: "float" },
   ];
-  const ARITHMETIC_OPERATORS = ["/+/", "/-/", "/*/", "///", "/%/"];
-  const ASSIGNATION_OPERATORS = ["/=/", "/+=/", "/-=/", "/*=/", "/%=/"];
-  const RELATIONAL_OPERATORS = ["/==/", "/!=/", "/>/", "/</", "/>=/", "/<=/"];
-  const SPECIAL_OPERATORS = ["/++/", "/--/", "/./"];
-  const GROUP_OPERATORS = ["/(/", "/)/", "/{/", "/}/", "/[/", "/]/"];
-  const LOGIC_OPERATORS = ["/&/", "/^/", "/|/", "/&&/", "/||/", "/?/", "/:/"];
-  const STRING_OPERATORS = ['/"/', "/'/"];
-  const COMMENTARY_OPERATORS = ["//*/", "///", "/*//"];
+  const ARITHMETIC_OPERATORS = [
+    { reg: /\+/, value: "+" },
+    { reg: /\-/, value: "-" },
+    { reg: /\*/, value: "*" },
+    { reg: /\//, value: "/" },
+    { reg: /\%/, value: "%" },
+  ];
+  const ASSIGNATION_OPERATORS = [
+    { reg: /\=/, value: "=" },
+    { reg: /\+\=/, value: "+=" },
+    { reg: /\-\=/, value: "-=" },
+    { reg: /\*\=/, value: "*=" },
+    { reg: /\%\=/, value: "%*" },
+  ];
+  const RELATIONAL_OPERATORS = [
+    { reg: /\=\=/, value: "==" },
+    { reg: /\!\=/, value: "!=" },
+    { reg: /\>/, value: ">" },
+    { reg: /\</, value: "<" },
+    { reg: /\>\=/, value: ">=" },
+    { reg: /\<\=/, value: "<=" },
+  ];
+  const SPECIAL_OPERATORS = [
+    { reg: /\+\+/, value: "++" },
+    { reg: /\-\-/, value: "--" },
+    { reg: /\./, value: "." },
+    { reg: /\;/, value: ";" },
+  ];
+  const GROUP_OPERATORS = [
+    { reg: /\(/, value: "(" },
+    { reg: /\)/, value: ")" },
+    { reg: /\{/, value: "{" },
+    { reg: /\}/, value: "}" },
+    { reg: /\[/, value: "[" },
+    { reg: /\]/, value: "]" },
+  ];
+  const LOGIC_OPERATORS = [
+    { reg: /\&/, value: "&" },
+    { reg: /\^/, value: "^" },
+    { reg: /\|/, value: "|" },
+    { reg: /\&\&/, value: "&&" },
+    { reg: /\|\|/, value: "||" },
+    { reg: /\?/, value: "?" },
+    { reg: /\:/, value: ":" },
+  ];
+  const STRING_OPERATORS = [
+    { reg: /\'/, value: "'" },
+    { reg: /\"/, value: '"' },
+  ];
+  const COMMENTARY_OPERATORS = [
+    { reg: /\/\*/, value: "//" },
+    { reg: /\*\//, value: "*/" },
+    { reg: /\/\//, value: "//" },
+  ];
 
   const [text, setText] = useState("");
+  const [tokens, setTokens] = useState([]);
 
-  const searchCommentary = ({ text, tokens }) => {
+  const search = ({ text, tokens, array, definition }) => {
     //TODO: mapear operadores de comentario y reemplazarlos por un string vacío, al tiempo que si se encuentra coincidencia agregue item a array
     let items = [];
+    let str = text;
 
-    COMMENTARY_OPERATORS.map((reg) => {
-      const isMatch = reg.test(text);
-      //
+    array.map((operator) => {
+      const regex = new RegExp(operator.reg, "g");
+      const isMatch = regex.test(text);
+      str = str.replaceAll(regex, "");
 
       if (isMatch) {
-        items = [...items, reg];
+        items = [...items, { token: operator.value, definition }];
       }
     });
 
     return {
-      text: "",
+      text: str,
       tokens: [...tokens, ...items],
     };
   };
 
-  const onClick = () => {
-    searchCommentary(searchString(searchLogic()));
+  const searchReserved = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: RESERVED,
+      definition: "Palabra reservada por el lenguaje.",
+    });
+  };
+  const searchBoolean = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: BOOLEAN_OPERATORS,
+      definition: "Valor booleano.",
+    });
+  };
+  const searchControlStructures = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: CONTROL_STRUCTURES,
+      definition: "Estructura de control",
+    });
+  };
+  const searchDataType = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: DATA_TYPE,
+      definition: "Tipo de dato",
+    });
+  };
+  const searchArithmetic = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: ARITHMETIC_OPERATORS,
+      definition: "Operador aritmético",
+    });
+  };
+  const searchAssignation = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: ASSIGNATION_OPERATORS,
+      definition: "Operador de asignación",
+    });
+  };
+  const searchRelational = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: RELATIONAL_OPERATORS,
+      definition: "Operador relacional o de comparación",
+    });
+  };
+  const searchSpecial = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: SPECIAL_OPERATORS,
+      definition: "Operador especial",
+    });
+  };
+  const searchGroup = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: GROUP_OPERATORS,
+      definition: "Símbolo de agrupación",
+    });
+  };
+  const searchLogic = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: LOGIC_OPERATORS,
+      definition: "Operador lógico",
+    });
+  };
+  const searchString = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens,
+      array: STRING_OPERATORS,
+      definition: "Operador para poder ingresar Strings en el programa.",
+    });
+  };
+  const searchCommentary = ({ text, tokens }) => {
+    return search({
+      text,
+      tokens: [],
+      array: COMMENTARY_OPERATORS,
+      definition: "Simbolo para poder realizar comentarios en el programa.",
+    });
+  };
 
-    const separatedBySpace = text.split(" ");
+  const onClick = () => {
+    setTokens(
+      searchReserved(
+        searchBoolean(
+          searchControlStructures(
+            searchDataType(
+              searchArithmetic(
+                searchAssignation(
+                  searchRelational(
+                    searchSpecial(
+                      searchGroup(
+                        searchLogic(
+                          searchString(searchCommentary({ text, tokens: [] }))
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      ).tokens
+    );
   };
 
   return (
@@ -149,7 +300,7 @@ function App() {
             Analizar
           </button>
         </div>
-        <Tokens />
+        <Tokens items={tokens} />
       </div>
     </div>
   );
