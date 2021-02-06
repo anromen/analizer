@@ -1,0 +1,32 @@
+0: {value: "//Una por los loles", type: "single_comment"}
+1: {value: "/*↵Multiline because aja↵*/", type: "multiline_comment"}
+2: {value: "public", type: "keyword"}
+3: {value: "class", type: "keyword"}
+4: {value: "HelloWorld", type: "identifier"}
+5: {value: "{", type: "separator"}
+6: {value: "public", type: "keyword"}
+7: {value: "static", type: "keyword"}
+8: {value: "void", type: "keyword"}
+9: {value: "main", type: "identifier"}
+10: {value: "(", type: "separator"}
+11: {value: "String", type: "identifier"}
+12: {value: "[]args", type: "identifier"}
+13: {value: ")", type: "separator"}
+14: {value: "{", type: "separator"}
+15: {value: "double", type: "keyword"}
+16: {value: "a", type: "identifier"}
+17: {value: "=", type: "assigment_operator"}
+18: {value: ".", type: "separator"}
+19: {value: "3", type: "non_zero_number_literal"}
+20: {value: ";", type: "separator"}
+21: {value: "System", type: "identifier"}
+22: {value: ".", type: "separator"}
+23: {value: "out", type: "identifier"}
+24: {value: ".", type: "separator"}
+25: {value: "println", type: "identifier"}
+26: {value: "(", type: "separator"}
+27: {value: ""Hello World"", type: "string_literal"}
+28: {value: ")", type: "separator"}
+29: {value: ";", type: "separator"}
+30: {value: "}", type: "separator"}
+31: {value: "}", type: "separator"}
